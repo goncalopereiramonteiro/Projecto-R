@@ -33,7 +33,7 @@ summary(InstallmentsPurchases)
 #InstallmentsPurchases.outliers = subset(Purchases, Mileage<=15000)
 
 
-#CreditLimit -> Introduzir os NA's com a média
+#CreditLimit -> Introduzir os NA's com a m?dia
 for(i in 1:length(CreditLimit)) {
   if(is.na(CreditLimit[i])) {
     CreditLimit[i] = 4494
@@ -43,7 +43,7 @@ summary(CreditLimit)
 
 
 
-#PurchasesInstallmentsFrequency -> Introduzir NA´s com a média
+#PurchasesInstallmentsFrequency -> Introduzir NAs com a media
 for(i in 1:length(PurchasesInstallmentsFrequency)) {
   if(is.na(PurchasesInstallmentsFrequency[i])) {
     PurchasesInstallmentsFrequency[i] = 0.3505
@@ -52,3 +52,4 @@ for(i in 1:length(PurchasesInstallmentsFrequency)) {
 summary(PurchasesInstallmentsFrequency)
 
 
+boxplot(InstallmentsPurchases)
