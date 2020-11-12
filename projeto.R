@@ -1,10 +1,11 @@
 setwd("C:/Users/g1a9p/Documents/R/Projecto-R")
 
+#Bibliotecas essenciais para o algoritmo K-Means
 library(ggplot2)
-library(readxl)
-install.packages("factoextra")
 library("factoextra")
 
+#Biblioteca essencial para a leitura do ficheiro XLSX
+library(readxl)
 
 #Leitura do Ficheiro e passagem de variáveis para formato contínuo
 CreditCard <- read_excel("CreditCard.xlsx", col_types = c("text", "numeric", "numeric","numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric","numeric", "numeric"))
@@ -12,7 +13,7 @@ summary(CreditCard)
 View(CreditCard)
 
 
-#Transformar Colunas em variáveis
+#Transformar Colunas em variaveis
 BalanceFrequency <- CreditCard$BALANCE_FREQUENCY
 Purchases <- CreditCard$PURCHASES
 InstallmentsPurchases <- CreditCard$INSTALLMENTS_PURCHASES
@@ -25,7 +26,7 @@ CreditLimit <- CreditCard$CREDIT_LIMIT
 
 
 #Remover outliers CreditCard
-CreditCard.no.outliers = subset(CreditCard,CreditCard$CASH_ADVANCE_FREQUENCY<1.0 & CreditCard$CREDIT_LIMIT<24000 & CreditCard$PURCHASES<30000 & CreditCard$INSTALLMENTS_PURCHASES<14000 & CreditCard$CASH_ADVANCE_TRX<56 & CreditCard$PURCHASES_TRX < 240)
+CreditCard.no.outliers = subset(CreditCard,CreditCard$CASH_ADVANCE_FREQUENCY<1.0 & CreditCard$CREDIT_LIMIT<24000 & CreditCard$PURCHASES<12000 & CreditCard$INSTALLMENTS_PURCHASES<8000 & CreditCard$CASH_ADVANCE_TRX<56 & CreditCard$PURCHASES_TRX<240)
 summary(CreditCard.no.outliers)
 View(CreditCard.no.outliers)
 
@@ -59,8 +60,8 @@ summary(CreditCard.no.outliers)
 
 
 
-#Criação de um novo DataSet - Objetivo: Proporcionar uma experiência superior através de um melhor conhecimento do cliente
-CreditCard_final_1 <- cbind(CreditCard.no.outliers$PURCHASES_FREQUENCY,CreditCard.no.outliers$PURCHASES_TRX)
+#Criacao de um novo DataSet - Objetivo: Proporcionar uma experiencia superior atraves de um melhor conhecimento do cliente
+CreditCard_final_1 <- cbind(CreditCard.no.outliers$PURCHASES_FREQUENCY,CreditCard.no.outliers$PURCHASES)
 View(CreditCard_final_1)
 
 
@@ -77,23 +78,22 @@ CreditCardkm = kmeans(CreditCard_scale,3)
 CreditCardkm
 
 
-#Visualizar
-fviz_cluster(CreditCardkm , geom ="point", data = as.data.frame(CreditCard_scale)) 
+#Visualizar os Clusters
+fviz_cluster(CreditCardkm ,xlab = "PURCHASES_FREQUENCY",ylab = "PURCHASES", geom ="point", data = as.data.frame(CreditCard_scale)) + ggtitle("Objetivo 1")
 
-
-#testar K-Means
+#Testar o K-Means
 CreditCardkm = kmeans(CreditCard_scale,2)
 CreditCardkm = kmeans(CreditCard_scale,4)
 CreditCardkm = kmeans(CreditCard_scale,5)
 CreditCardkm = kmeans(CreditCard_scale,6)
-fviz_cluster(CreditCardkm , geom ="point", data = CreditCard_scale) 
+fviz_cluster(CreditCardkm , geom ="point", data = CreditCard_scale) + ggtitle("Objetivo 1")
 
 
 
 
 
 
-#Criação de um novo DataSet - Objetivo: Reduzir as taxas de abandono para outros bancos (churn) de forma pró-ativa 
+#Criacao de um novo DataSet - Objetivo: Reduzir as taxas de abandono para outros bancos (churn) de forma pro-ativa 
 CreditCard_final_2 <- cbind(CreditCard.no.outliers$BALANCE_FREQUENCY,CreditCard.no.outliers$PURCHASES_TRX)
 
 
@@ -109,24 +109,23 @@ CreditCardkm = kmeans(CreditCard_scale,3)
 CreditCardkm
 
 
-#Visualizar
-fviz_cluster(CreditCardkm , geom ="point", data = as.data.frame(CreditCard_scale)) 
+#Visualizar os Clusters
+fviz_cluster(CreditCardkm ,xlab = "BALANCE_FREQUENCY",ylab = "PURCHASES_TRX", geom ="point", data = as.data.frame(CreditCard_scale)) + ggtitle("Objetivo 2")
 
 
-#testar K-Means
+#Testar o K-Means
 CreditCardkm = kmeans(CreditCard_scale,2)
 CreditCardkm = kmeans(CreditCard_scale,4)
 CreditCardkm = kmeans(CreditCard_scale,5)
 CreditCardkm = kmeans(CreditCard_scale,6)
-fviz_cluster(CreditCardkm , geom ="point", data = as.data.frame(CreditCard_scale)) 
+fviz_cluster(CreditCardkm , geom ="point", data = as.data.frame(CreditCard_scale)) + ggtitle("Objetivo 2")
 
 
 
 
 
 
-
-#Criação de um novo DataSet - Objetivo: Fomentar o uso do cartão de crédito por parte dos seus clientes
+#Criacao de um novo DataSet - Objetivo: Fomentar o uso do cartao de credito por parte dos seus clientes
 CreditCard_final_3 <- cbind(CreditCard.no.outliers$PURCHASES,CreditCard.no.outliers$CREDIT_LIMIT)
 
 #Scale
@@ -141,13 +140,13 @@ CreditCardkm = kmeans(CreditCard_scale,3)
 CreditCardkm
 
 
-#Visualizar
-fviz_cluster(CreditCardkm , geom ="point", data = as.data.frame(CreditCard_scale)) 
+#Visualizar os Clusters
+fviz_cluster(CreditCardkm , xlab = "PURCHASES", ylab = "CREDIT_LIMIT" , geom ="point", data = as.data.frame(CreditCard_scale)) + ggtitle("Objetivo 3") 
 
 
-#testar K-Means
+#Testar o K-Means
 CreditCardkm = kmeans(CreditCard_scale,2)
 CreditCardkm = kmeans(CreditCard_scale,4)
 CreditCardkm = kmeans(CreditCard_scale,5)
 CreditCardkm = kmeans(CreditCard_scale,6)
-fviz_cluster(CreditCardkm , geom ="point", data = as.data.frame(CreditCard_scale)) 
+fviz_cluster(CreditCardkm , geom ="point", data = as.data.frame(CreditCard_scale)) + ggtitle("Objetivo 3")
